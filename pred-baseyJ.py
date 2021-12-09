@@ -66,38 +66,6 @@ J_std = torch.Tensor(J_std).cuda(device)
 if torch.cuda.is_available():
     train_x, train_y, test_x, test_y = train_x.cuda(), train_y.cuda(), test_x.cuda(), test_y.cuda()
 
-
-def mean_absolute_percentage_error(y_true, y_pred):
-    return torch.mean(torch.abs((y_true - y_pred) / y_true)) * 100
-
-# Construct Pytorch/Skorch model
-class AttrProxy(object):
-    """Translates index lookups into attribute lookups."""
-    def __init__(self, module, prefix):
-        self.module = module
-        self.prefix = prefix
-    
-    def __getitem__(self, i):
-        return getattr(self.module, self.prefix + str(i))
-  
-class Net(torch.nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
-    
-        input_dim = num_features
-        for i in range(mlp_layers-1):
-                self.add_module('fc_' + str(i), nn.Linear(input_dim, mlp_dim))
-                input_dim = mlp_dim
-        self.fc = AttrProxy(self, 'fc_')
-        self.fc1 = nn.Linear(input_dim, num_tasks)
-    
-    def forward(self, x):
-        for i in range(mlp_layers-1):
-                fc = self.fc.__getitem__(i)
-                x = torch.tanh(fc(x))
-        x = self.fc1(x)
-        return x
-
 from skorch.callbacks import Checkpoint, LoadInitState, LRScheduler
 cp1 = Checkpoint(dirname='./'+dir_name+'/' )
 
