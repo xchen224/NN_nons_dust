@@ -8,13 +8,6 @@ from skorch import NeuralNetRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-#task = 0
-#mlp_layers = 4
-#mlp_dim = 768 #768
-#max_epochs = 1000
-#lr = 1e-4
-#min_lr = 1e-5
-
 task = 1
 mlp_layers = 4
 mlp_dim = 768 #768
